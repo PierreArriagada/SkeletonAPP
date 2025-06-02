@@ -1,20 +1,57 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary"> <ion-title class="ion-text-center page-main-title">
+      SkeletonAPP </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content class="home-page-content ion-padding">
+  <div class="welcome-greeting-container">
+    <h2 *ngIf="userData">Bienvenido, {{ userData }}!</h2>
+    <h2 *ngIf="!userData">Bienvenido!</h2>
   </div>
+
+  <ion-card class="info-card">
+    <ion-card-header>
+      <ion-card-title class="info-card-title">Información Adicional</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form #infoForm="ngForm" class="info-form">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Nombre</mat-label>
+          <input matInput [(ngModel)]="userInfo.nombre" name="nombre" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Apellido</mat-label>
+          <input matInput [(ngModel)]="userInfo.apellido" name="apellido" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Nivel de Educación</mat-label>
+          <mat-select [(ngModel)]="userInfo.educacion" name="educacion" required>
+            <mat-option *ngFor="let nivel of nivelesEducacion" [value]="nivel.valor">
+              {{ nivel.vistaValor }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="userInfo.fechaNacimiento" name="fechaNacimiento" required readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="form-buttons-container">
+          <button mat-stroked-button color="warn" (click)="limpiarFormulario()" class="action-button">
+            <mat-icon>delete_sweep</mat-icon> Limpiar
+          </button>
+          <span class="button-spacer"></span> <button mat-raised-button color="primary" (click)="mostrarInformacion()" [disabled]="infoForm.invalid" class="action-button">
+            <mat-icon>visibility</mat-icon> Mostrar
+          </button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

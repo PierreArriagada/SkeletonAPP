@@ -1,0 +1,160 @@
+// login.page.scss
+
+// Variables de diseño (puedes ajustarlas o definirlas en :root o theme/variables.scss)
+$page-background-color: #ffffff; // Un gris claro y suave
+$card-background-color: #3881ff8c; // Un gris claro para la card
+$primary-text-color: #333333;
+$secondary-text-color: #555555;
+$primary-color: var(--ion-color-primary, #3880ff); // Usa la variable de Ionic o define una
+$error-color: var(--ion-color-danger, #f53d3d);
+$input-border-radius: 8px;
+$card-border-radius: 16px;
+$card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); // Sombra más sofisticada
+
+// Estilo para el contenedor principal de la página de login
+.login-page-content {
+  --background: #{$page-background-color}; // Fondo gris para toda la página
+  display: flex; // Habilitar Flexbox
+  justify-content: center; // Centrar horizontalmente el contenido hijo
+  align-items: center; // Centrar verticalmente el contenido hijo
+  min-height: 100vh; // Asegurar que ocupe toda la altura de la pantalla
+  padding: 20px; // Padding general para la página
+  box-sizing: border-box;
+
+}
+
+// Contenedor para el formulario y título
+.login-form-container {
+  margin-top: 30px;
+  width: 100%;
+  max-width: 420px; // Ancho máximo para el contenido del login
+  display: flex;
+  padding: 20px; // Padding interno para el contenedor
+  flex-direction: column;
+  align-items: center; // Centrar hijos (título y card)
+}
+
+// Título principal "SkeletonAPP"
+.app-main-title {
+  text-align: center; // Asegurar que el texto dentro del div esté centrado
+  margin-bottom: 30px;
+  margin-top: 2rem; // Espacio debajo del título principal
+
+  h1 {
+    font-size: 3.0rem; // Tamaño de fuente grande
+    font-weight: 700; // Negrita
+    color: $primary-color; // Usar el color primario
+    margin: 0; // Quitar margen por defecto de h1
+  }
+}
+
+// Estilos para la Card de Login
+.login-card {
+  width: 100%; // La card ocupa el ancho de su contenedor (.login-form-container)
+  --background: #{$card-background-color};
+  border-radius: $card-border-radius;
+  box-shadow: $card-shadow;
+  overflow: hidden; // Para que el border-radius afecte a los hijos
+}
+
+.login-card-header {
+  padding-top: 25px;
+  padding-bottom: 5px; // Menos padding abajo si el título tiene buen margen
+  text-align: center; // Centrar el título de la card
+  border-bottom: none; // Quitar borde si Ionic lo añade
+}
+
+.login-card-title {
+  font-size: 1.8rem; // Tamaño para "¡Bienvenido!"
+  font-weight: 600;
+  color: $primary-text-color;
+  margin: 0;
+}
+
+.login-card-content {
+  padding: 20px 25px 30px 25px; // Buen padding interno para el contenido
+
+}
+
+// Agrupador para cada input y su mensaje de error
+.form-input-group {
+  margin-bottom: 20px; // Espacio entre cada grupo de input
+  &:last-of-type {
+    margin-bottom: 30px; // Más espacio antes del botón
+  }
+}
+
+// Estilos para ion-item y ion-input
+.input-item {
+  --background: #f9f9f9; // Un fondo muy sutil para los inputs o transparente
+  // --background: transparent;
+  border-radius: $input-border-radius;
+  // Opcional: un borde sutil
+  // border: 1px solid #e0e0e0;
+  --padding-start: 12px; // Ajustar padding interno de ion-item
+  --inner-padding-end: 12px;
+  --min-height: 50px; // Altura mínima para los inputs
+
+  ion-label {
+    font-size: 0.95rem; // Ajuste fino del label
+    color: $secondary-text-color;
+  }
+
+  ion-input {
+    font-size: 1rem;
+    color: $primary-text-color; // Color del texto del input
+    // color: $primary-text-color;
+  }
+
+  // Estilos cuando el item tiene foco (puede ser más elaborado)
+  &.item-has-focus {
+    // border-color: $primary-color;
+    // box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+  }
+}
+
+// Mensajes de error
+.error-message {
+  font-size: 0.8em;
+  color: $error-color;
+  padding-left: 4px; // Pequeño padding para alineación
+  margin-top: 5px; // Espacio sobre el mensaje de error
+}
+
+// Botón de Iniciar Sesión
+.login-submit-button {
+  height: 50px; // Buena altura para el botón
+  font-size: 1.1rem;
+  font-weight: 600; // Texto del botón en negrita
+  text-transform: none; // Quitar mayúsculas por defecto si Ionic las pone
+  --box-shadow: 0 4px 15px rgba(var(--ion-color-primary-rgb, 56, 128, 255), 0.4); // Sombra del color primario
+}
+
+// Acciones de "Olvidé mi contraseña"
+.forgot-password-actions {
+  text-align: center; // Centrar el enlace
+  margin-top: 25px; // Espacio sobre el enlace
+}
+
+.forgot-password-link {
+  font-size: 0.9rem;
+  color: $secondary-text-color;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $primary-color;
+    text-decoration: underline;
+  }
+}
+
+.api-error-message {
+  color: $error-color; // Usa tu variable de color de error (ej. rojo)
+  text-align: center; // Centrar el mensaje
+  font-size: 0.9em;
+  margin-top: 15px; // Espacio sobre el mensaje
+  margin-bottom: 10px; // Espacio debajo del mensaje, antes del link "Olvidé contraseña"
+  padding: 8px;
+  // background-color: rgba($error-color, 0.1); // Un fondo sutil para el error (opcional)
+  // border-radius: $input-border-radius; // Mismos bordes que los inputs (opcional)
+}
