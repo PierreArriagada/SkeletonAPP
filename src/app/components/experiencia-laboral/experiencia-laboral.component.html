@@ -1,0 +1,27 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Experiencia Laboral</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-input label="Empresa" labelPlacement="stacked" placeholder="Nombre de la empresa" [(ngModel)]="experienciaData.empresa" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Cargo" labelPlacement="stacked" placeholder="Cargo que desempeñaste" [(ngModel)]="experienciaData.cargo" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input label="Año de Inicio" labelPlacement="stacked" type="number" placeholder="Ej: 2020" [(ngModel)]="experienciaData.anoInicio" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [(ngModel)]="experienciaData.trabajaActualmente" (ionChange)="onToggleTrabajo()">¿Trabajas aquí actualmente?</ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="!experienciaData.trabajaActualmente">
+        <ion-input label="Año de Término" labelPlacement="stacked" type="number" placeholder="Ej: 2022" [(ngModel)]="experienciaData.anoTermino" required></ion-input>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" (click)="guardarExperiencia()" class="ion-margin-top">
+      Guardar Experiencia
+    </ion-button>
+  </ion-card-content>
+</ion-card>

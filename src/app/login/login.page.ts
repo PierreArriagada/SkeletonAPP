@@ -1,21 +1,18 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Router, NavigationExtras } from '@angular/router';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, AnimationController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { DbtaskService } from '../services/dbtask.service'; // Importa el servicio de la base de datos
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule
-  ]
+  imports: [IonicModule, CommonModule, FormsModule]
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   credentials = {
     username: '',
     password: ''
@@ -28,8 +25,18 @@ export class LoginPage {
 
   constructor(
     private router: Router,
-    private animationCtrl: AnimationController
+    private animationCtrl: AnimationController,
+    private dbtaskService: DbtaskService // Inyecta el servicio para poder usarlo
   ) {}
+
+  ngOnInit() {
+    // Se asegura que la BD esté lista y registra un usuario de prueba.
+    this.dbtaskService.getDbReady().subscribe((isReady: boolean) => {
+      if (isReady) {
+        this.dbtaskService.registrarUsuario('pierre', '1234');
+      }
+    });
+  }
 
   ionViewDidEnter() {
     this.animateInputElement(this.usernameInputElement);
@@ -37,7 +44,6 @@ export class LoginPage {
   }
 
   async animateInputElement(elementRef: ElementRef<HTMLIonInputElement>, delay: number = 0) {
-    // ... (código de animación sin cambios)
     if (elementRef && elementRef.nativeElement) {
       try {
         const inputToAnimate = await elementRef.nativeElement.getInputElement();
@@ -56,58 +62,30 @@ export class LoginPage {
     }
   }
 
-  onLogin() {
-    this.loginApiError = null; // Resetea el mensaje de error
+  async onLogin() {
+    this.loginApiError = null;
+    const { username, password } = this.credentials;
 
-    const username = this.credentials.username;
-    const password = this.credentials.password;
-
-    // --- INICIO DE DEPURACIÓN ---
-    console.log('--- Intento de Login ---');
-    console.log('Usuario ingresado:', username, '(Tipo:', typeof username, ')');
-    console.log('Contraseña ingresada:', password, '(Tipo:', typeof password, ')');
-    // --- FIN DE DEPURACIÓN ---
-
-    // 1. Validaciones de formato (PGY4221)
+    // 1. Validaciones de formato
     const isUsernameFormatValid = username.length >= 3 && username.length <= 8 && /^[a-zA-Z0-9]*$/.test(username);
-    console.log('¿Formato de usuario válido?:', isUsernameFormatValid);
-
     if (!isUsernameFormatValid) {
-      this.loginApiError = "Formato de nombre de usuario incorrecto. Debe ser alfanumérico, entre 3 y 8 caracteres.";
-      console.error('Error de formato:', this.loginApiError);
-      return; // Detiene la ejecución si el formato del usuario es incorrecto
+      this.loginApiError = "Formato de usuario incorrecto (3-8 caracteres, alfanumérico).";
+      return;
     }
-
     const isPasswordFormatValid = /^[0-9]{4}$/.test(password);
-    console.log('¿Formato de contraseña válido?:', isPasswordFormatValid);
-
     if (!isPasswordFormatValid) {
-      this.loginApiError = "Formato de contraseña incorrecto. Debe ser numérica de 4 dígitos.";
-      console.error('Error de formato:', this.loginApiError);
-      return; // Detiene la ejecución si el formato de la contraseña es incorrecto
+      this.loginApiError = "Formato de contraseña incorrecto (4 dígitos numéricos).";
+      return;
     }
 
-    // 2. Validación de credenciales específicas
-    const targetUsername = "pierre";
-    const targetPassword = "1234";
+    // 2. Conexión con la base de datos para validar credenciales.
+    const isValid = await this.dbtaskService.validarUsuario(username, password);
 
-    console.log(`Comparando: ('${username.toLowerCase()}' === '${targetUsername}') Y ('${password}' === '${targetPassword}')`);
-
-    if (username.toLowerCase() === targetUsername && password === targetPassword) {
-      console.log('¡Credenciales correctas! Navegando a /home...');
-
-      let navigationExtras: NavigationExtras = {
-        state: {
-          user: username
-        }
-      };
-      this.router.navigate(['/home'], navigationExtras).catch(navError => {
-        console.error('Error al navegar a /home:', navError);
-        this.loginApiError = 'Error al intentar navegar a la página principal.';
-      });
-
+    if (isValid) {
+      // 3. Si las credenciales son válidas, se activa la sesión en la BD y se navega.
+      await this.dbtaskService.activarSesion(username);
+      this.router.navigate(['/home']);
     } else {
-      console.warn('Credenciales incorrectas.');
       this.loginApiError = 'Nombre de usuario o contraseña incorrectos.';
     }
   }

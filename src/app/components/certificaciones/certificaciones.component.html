@@ -1,0 +1,38 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Certificaciones y Cursos</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-input label="Nombre del Certificado" labelPlacement="stacked" placeholder="Ej: Scrum Master" [(ngModel)]="certificacionData.nombre" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>Fecha de Obtención</ion-label>
+        <ion-datetime-button datetime="fechaObtencion"></ion-datetime-button>
+      </ion-item>
+      <ion-item>
+        <ion-toggle [(ngModel)]="certificacionData.tieneVencimiento" (ionChange)="onToggleVencimiento()">¿Tiene fecha de vencimiento?</ion-toggle>
+      </ion-item>
+      <ion-item *ngIf="certificacionData.tieneVencimiento">
+        <ion-label>Fecha de Vencimiento</ion-label>
+        <ion-datetime-button datetime="fechaVencimiento"></ion-datetime-button>
+      </ion-item>
+    </ion-list>
+
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="fechaObtencion" presentation="date" [(ngModel)]="certificacionData.fechaObtencion"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime id="fechaVencimiento" presentation="date" [(ngModel)]="certificacionData.fechaVencimiento"></ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <ion-button expand="block" (click)="guardarCertificacion()" class="ion-margin-top">
+      Guardar Certificación
+    </ion-button>
+  </ion-card-content>
+</ion-card>

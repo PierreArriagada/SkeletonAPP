@@ -1,0 +1,44 @@
+<ion-card class="info-card">
+    <ion-card-header>
+      <ion-card-title class="info-card-title">Información Adicional</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form #infoForm="ngForm" class="info-form">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Nombre</mat-label>
+          <input matInput [(ngModel)]="userInfo.nombre" name="nombre" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Apellido</mat-label>
+          <input matInput [(ngModel)]="userInfo.apellido" name="apellido" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Nivel de Educación</mat-label>
+          <mat-select [(ngModel)]="userInfo.educacion" name="educacion" required>
+            <mat-option *ngFor="let nivel of nivelesEducacion" [value]="nivel.valor">
+              {{ nivel.vistaValor }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="userInfo.fechaNacimiento" name="fechaNacimiento" required readonly>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="form-buttons-container">
+          <button mat-stroked-button color="warn" (click)="limpiarFormulario()" class="action-button">
+            <mat-icon>delete_sweep</mat-icon> Limpiar
+          </button>
+          <span class="button-spacer"></span> <button mat-raised-button color="primary" (click)="mostrarInformacion()" [disabled]="infoForm.invalid" class="action-button">
+            <mat-icon>visibility</mat-icon> Mostrar
+          </button>
+        </div>
+      </form>
+    </ion-card-content>
+</ion-card>
