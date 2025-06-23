@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "pierre",
+      "nombre": "PierrePierre",
+      "apellido": "GaslyArriagada",
+      "educacion": "media",
+      "fechaNacimiento": "1996-02-14T03:00:00.000Z",
+      "lat": null,
+      "lng": null,
+      "profileImageUrl": "blob:http://localhost:8100/42aa8b3f-82b4-4cd5-b54b-a864a1b949f7"
+    }
+  ]
+}

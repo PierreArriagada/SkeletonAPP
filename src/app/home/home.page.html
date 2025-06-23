@@ -1,34 +1,26 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title class="ion-text-center page-main-title">
-      SkeletonAPP
-    </ion-title>
+    <ion-buttons slot="start">
+      <ion-avatar class="header-avatar">
+        <img [src]="userProfile?.profileImageUrl" alt="Foto de perfil" />
+      </ion-avatar>
+    </ion-buttons>
+    <ion-title class="ion-text-center page-main-title">SkeletonAPP</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="logout()" fill="clear" color="light">
-        <ion-icon name="log-out-outline"></ion-icon>
+      <ion-button (click)="logout()" fill="clear" class="logout-button">
+        <ion-icon name="log-out-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-
   <ion-toolbar>
     <ion-segment [value]="activeSegment" (ionChange)="segmentChanged($event)">
-      <ion-segment-button value="mis-datos">
-        <ion-label>Mis Datos</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="experiencia">
-        <ion-label>Experiencia</ion-label>
-      </ion-segment-button>
-      <ion-segment-button value="certificaciones">
-        <ion-label>Certificaciones</ion-label>
-      </ion-segment-button>
+      <ion-segment-button value="mis-datos"><ion-label>Mis Datos</ion-label></ion-segment-button>
+      <ion-segment-button value="experiencia"><ion-label>Experiencia</ion-label></ion-segment-button>
+      <ion-segment-button value="certificaciones"><ion-label>Certificaciones</ion-label></ion-segment-button>
     </ion-segment>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <div class="welcome-greeting-container">
-    <h2 *ngIf="userData">Bienvenido, {{ userData }}!</h2>
-  </div>
-
+<ion-content class="home-page-background">
   <ion-router-outlet></ion-router-outlet>
 </ion-content>

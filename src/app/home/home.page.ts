@@ -1,8 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { DbtaskService } from '../services/dbtask.service';
+import { StateService } from '../services/state.service';
+import { UserProfile } from '../models/user.model';
+
+
+import { addIcons } from 'ionicons';
+import { logOutOutline } from 'ionicons/icons';
+
 
 @Component({
   selector: 'app-home',
@@ -11,30 +19,48 @@ import { DbtaskService } from '../services/dbtask.service';
   standalone: true,
   imports: [IonicModule, CommonModule],
 })
-export class HomePage implements OnInit {
-  userData: string | null = null;
-  activeSegment = 'mis-datos'; // Segmento activo por defecto
+export class HomePage implements OnInit, OnDestroy {
+  
+  userProfile: UserProfile | null = null;
+  activeSegment = 'mis-datos';
+  private userSubscription!: Subscription;
 
   constructor(
     private router: Router,
-    private dbtaskService: DbtaskService
-  ) {}
-
-  async ngOnInit() {
-    // Obtiene el usuario activo desde el servicio, no de NavigationExtras
-    this.userData = await this.dbtaskService.getActiveUser();
+    private dbtaskService: DbtaskService,
+    private stateService: StateService
+  ) {
+    addIcons({ logOutOutline });
+   
   }
 
-  // Maneja el cambio de segmento para navegar 
+  ngOnInit() {
+    this.userSubscription = this.stateService.currentUser$.subscribe(user => {
+      this.userProfile = user;
+    });
+  }
+
+  ionViewWillEnter() {
+    if(this.router.url === '/home' || this.router.url === '/home/') {
+      this.router.navigate(['home/mis-datos'], { replaceUrl: true });
+    }
+  }
+
   segmentChanged(event: any) {
     const segmentValue = event.detail.value;
     this.activeSegment = segmentValue;
     this.router.navigate(['home', segmentValue]);
   }
 
-  // Cierra la sesión del usuario
   async logout() {
     await this.dbtaskService.cerrarSesion();
+    this.stateService.setCurrentUser(null);
     this.router.navigate(['/login']);
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 }

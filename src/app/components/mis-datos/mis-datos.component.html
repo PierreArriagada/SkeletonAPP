@@ -1,9 +1,18 @@
 <ion-card class="info-card">
-    <ion-card-header>
-      <ion-card-title class="info-card-title">Información Adicional</ion-card-title>
-    </ion-card-header>
+  <ion-card-content>
 
-    <ion-card-content>
+    <div *ngIf="userInfo">
+
+      <div class="profile-image-section">
+        <ion-avatar class="details-avatar">
+          <img [src]="userInfo.profileImageUrl" alt="Foto de perfil" />
+        </ion-avatar>
+        <ion-button fill="clear" (click)="cambiarFoto()" class="change-photo-button">
+          <ion-icon name="camera" slot="start"></ion-icon>
+          Cambiar foto
+        </ion-button>
+      </div>
+      
       <form #infoForm="ngForm" class="info-form">
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Nombre</mat-label>
@@ -31,14 +40,25 @@
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
+        <div class="location-container">
+          <button type="button" mat-stroked-button color="accent" (click)="obtenerUbicacionActual()">
+            <mat-icon>location_on</mat-icon>
+            Obtener Mi Ubicación
+          </button>
+          <p *ngIf="userInfo.lat" class="location-coords">
+            Ubicación: {{ userInfo.lat | number:'1.4-4' }}, {{ userInfo.lng | number:'1.4-4' }}
+          </p>
+        </div>
+
         <div class="form-buttons-container">
-          <button mat-stroked-button color="warn" (click)="limpiarFormulario()" class="action-button">
+          <button type="button" mat-stroked-button color="warn" (click)="limpiarFormulario()">
             <mat-icon>delete_sweep</mat-icon> Limpiar
           </button>
-          <span class="button-spacer"></span> <button mat-raised-button color="primary" (click)="mostrarInformacion()" [disabled]="infoForm.invalid" class="action-button">
-            <mat-icon>visibility</mat-icon> Mostrar
+          <button type="button" mat-raised-button color="primary" (click)="guardarInformacion()" [disabled]="infoForm.invalid">
+            <mat-icon>save</mat-icon> Guardar
           </button>
         </div>
       </form>
-    </ion-card-content>
+
+    </div> </ion-card-content>
 </ion-card>

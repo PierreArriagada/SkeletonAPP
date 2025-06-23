@@ -1,0 +1,81 @@
+// --- Variables de Diseño para un Tema Claro y Limpio ---
+$primary-color: var(--ion-color-primary, #3880ff);
+$card-background: #ffffff;
+$input-background: #f7f8fa; // Un gris muy claro para el fondo de los inputs
+$input-border-color: #e0e6f1;
+$input-text-color: #222428;  // Color de texto oscuro para alta visibilidad
+$label-color: #6c757d;
+$card-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+// --- Estilos de la Tarjeta Principal ---
+.info-card {
+  margin: 0;
+  box-shadow: none;
+  --background: transparent; // La tarjeta en sí es transparente, el contenido tiene el fondo.
+}
+
+// --- Sección de Imagen de Perfil ---
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-top: 16px;
+
+  .details-avatar {
+    width: 120px;
+    height: 120px;
+    border: 4px solid #eaf2ff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .change-photo-button {
+    margin-top: 12px;
+    font-weight: 500;
+  }
+}
+
+// --- Estilos del Formulario ---
+.info-form {
+  padding: 16px;
+  background-color: $card-background;
+  border-radius: 16px;
+  box-shadow: $card-shadow;
+}
+
+// Estilos para los campos de Angular Material
+.form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+
+  // Fondo del campo
+  .mat-mdc-form-field-flex {
+    background-color: $input-background !important;
+  }
+  
+  // Color del texto que se escribe
+  .mat-mdc-input-element {
+    color: $input-text-color !important;
+  }
+
+  // Color de la etiqueta (placeholder)
+  .mdc-floating-label {
+    color: $label-color !important;
+  }
+}
+
+// --- Sección de Geolocalización ---
+.location-container {
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+// --- Botones de Acción ---
+.form-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid $input-border-color;
+}
