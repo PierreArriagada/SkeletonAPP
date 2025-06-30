@@ -48,8 +48,17 @@ export class MisDatosComponent implements OnInit {
     const username = await this.dbTaskService.getActiveUser();
     if(username === 'pierre') this.userId = 1; 
     
-    this.apiService.getUserProfile(this.userId).subscribe(profile => {
-      this.stateService.setCurrentUser(profile);
+    // CORREGIDO: Verificar si profile no es null antes de usarlo
+    this.apiService.getUserProfile(this.userId).subscribe((profile: UserProfile | null) => {
+      if (profile) {
+        // Solo proceder si profile no es null
+        this.stateService.setCurrentUser(profile);
+        this.dbTaskService.saveUserProfile(profile);
+      } else {
+        // Si no hay perfil, crear uno por defecto o manejar el caso
+        console.log('No se encontró perfil para el usuario:', this.userId);
+        this.createDefaultProfile();
+      }
     });
 
     this.stateService.currentUser$.subscribe(user => {
@@ -58,6 +67,25 @@ export class MisDatosComponent implements OnInit {
       }
       this.userInfo = user;
     });
+  }
+
+  // NUEVO: Método para crear perfil por defecto
+  private createDefaultProfile(): void {
+    const defaultProfile: UserProfile = {
+      id: this.userId,
+      username: 'pierre', // o el username que corresponda
+      nombre: '',
+      apellido: '',
+      educacion: '',
+      fechaNacimiento: null,
+      profileImageUrl: '',
+      // Agregar lat y lng si están en tu modelo
+      lat: null,
+      lng: null
+    };
+    
+    this.stateService.setCurrentUser(defaultProfile);
+    this.dbTaskService.saveUserProfile(defaultProfile);
   }
 
   cambiarFoto() {
@@ -76,8 +104,11 @@ export class MisDatosComponent implements OnInit {
     this.apiService.getCurrentLocation().subscribe({
       next: (coords) => {
         if(this.userInfo) {
-          this.userInfo.lat = coords.lat;
-          this.userInfo.lng = coords.lng;
+          // Verificar si lat y lng existen en el modelo UserProfile
+          if ('lat' in this.userInfo && 'lng' in this.userInfo) {
+            (this.userInfo as any).lat = coords.lat;
+            (this.userInfo as any).lng = coords.lng;
+          }
           alert('Ubicación obtenida con éxito.');
         }
       },
@@ -89,9 +120,15 @@ export class MisDatosComponent implements OnInit {
 
   guardarInformacion(): void {
     if (this.userInfo) {
-      this.apiService.updateUserProfile(this.userId, this.userInfo).subscribe(updatedProfile => {
-        this.stateService.setCurrentUser(updatedProfile);
-        alert('¡Datos guardados con éxito!');
+      this.apiService.updateUserProfile(this.userId, this.userInfo).subscribe({
+        next: (updatedProfile) => {
+          this.stateService.setCurrentUser(updatedProfile);
+          alert('¡Datos guardados con éxito!');
+        },
+        error: (err) => {
+          console.error('Error al guardar:', err);
+          alert('Error al guardar los datos. Inténtalo de nuevo.');
+        }
       });
     }
   }
@@ -105,9 +142,10 @@ export class MisDatosComponent implements OnInit {
         apellido: '',
         educacion: '',
         fechaNacimiento: null,
-        lat: null,
-        lng: null,
-        profileImageUrl: this.userInfo.profileImageUrl
+        profileImageUrl: this.userInfo.profileImageUrl,
+        // Agregar lat y lng si están en tu modelo
+        ...(('lat' in this.userInfo) && { lat: null }),
+        ...(('lng' in this.userInfo) && { lng: null })
       };
     }
   }

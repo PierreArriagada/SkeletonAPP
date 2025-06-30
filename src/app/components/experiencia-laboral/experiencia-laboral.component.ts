@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { ApiService } from '../../services/api.service'; 
 
 // Modelo para los datos de experiencia
 interface Experiencia {
@@ -29,7 +30,7 @@ export class ExperienciaLaboralComponent implements OnInit {
     cargo: ''
   };
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {}
 
@@ -41,8 +42,14 @@ export class ExperienciaLaboralComponent implements OnInit {
   }
 
   guardarExperiencia() {
-    // Aquí iría la lógica para guardar los datos, por ahora solo los mostramos
-    console.log('Datos de Experiencia Laboral:', this.experienciaData);
-    alert('Experiencia guardada. Revisa la consola para ver los datos.');
+    this.apiService.guardarExperiencia(this.experienciaData).subscribe({
+      next: (response) => {
+        console.log('Respuesta de la API:', response);
+        alert('Experiencia guardada con éxito (simulado).');
+      },
+      error: (err) => {
+        alert('Hubo un error al guardar la experiencia.');
+      }
+    });
   }
 }

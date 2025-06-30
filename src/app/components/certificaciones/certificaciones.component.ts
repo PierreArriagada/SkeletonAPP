@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { ApiService } from '../../services/api.service';
 
 interface Certificacion {
   nombre: string;
@@ -26,7 +27,7 @@ export class CertificacionesComponent implements OnInit {
     fechaVencimiento: ''
   };
 
-  constructor() { }
+  constructor(private apiService: ApiService) { }
 
   ngOnInit() {}
 
@@ -37,8 +38,14 @@ export class CertificacionesComponent implements OnInit {
   }
 
   guardarCertificacion() {
-    console.log('Datos de Certificación:', this.certificacionData);
-    alert('Certificación guardada. Revisa la consola para ver los datos.');
+    this.apiService.guardarCertificacion(this.certificacionData).subscribe({
+      next: (response) => {
+        console.log('Respuesta de la API:', response);
+        alert('Certificación guardada con éxito (simulado).');
+      },
+      error: (err) => {
+        alert('Hubo un error al guardar la certificación.');
+      }
+    });
   }
-
 }
