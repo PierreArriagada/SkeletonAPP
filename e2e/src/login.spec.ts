@@ -26,13 +26,12 @@ test.describe('Pruebas de Autenticación y Perfil con Playwright', () => {
     await page.locator('[data-testid="password-input"] input').fill('1234');
     await page.locator('[data-testid="login-button"]').click();
 
-    // ----- INICIO DE LA CORRECCIÓN -----
     // Buscamos el botón de GUARDAR en la página de "Mis Datos"
     const saveButton = page.getByTestId('guardar-datos-button');
     
     // Verificamos que el botón sea visible para confirmar que la página cargó correctamente.
     await expect(saveButton).toBeVisible({ timeout: 10000 });
-    // ----- FIN DE LA CORRECCIÓN -----
+   
 
     await expect(page).toHaveURL(/.*home\/mis-datos/);
   });
